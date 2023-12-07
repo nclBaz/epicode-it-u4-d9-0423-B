@@ -36,7 +36,7 @@ public class Application {
 
 
 		// ********************************************************* COLLECTORS ********************************************************
-
+		System.out.println("********************************************************* COLLECTORS ********************************************************");
 		// 1. Raggruppare gli users per città
 		Map<String, List<User>> usersPerCittà = users.stream().filter(user -> user.getAge() < 18).collect(Collectors.groupingBy(user -> user.getCity()));
 		usersPerCittà.forEach((città, listaUtenti) -> System.out.println("Città " + città + ", " + listaUtenti));
@@ -60,6 +60,27 @@ public class Application {
 		// 6. Raggruppare per città con informazioni su età minima, massima, somma delle età, media delle età e conteggio utenti di quella città
 		Map<String, IntSummaryStatistics> mediaEtàPerCittàConStatistiche = users.stream().collect(Collectors.groupingBy(User::getCity, Collectors.summarizingInt(User::getAge)));
 		mediaEtàPerCittàConStatistiche.forEach((città, stats) -> System.out.println("Città: " + città + ", " + stats));
+
+		// ********************************************************* COMPARATORS ********************************************************
+		System.out.println("********************************************************* COMPARATORS ********************************************************");
+		// A differenza dei metodi per ordinare di Collection, i quali modificano la lista originale ordinandola, i Comparator ci consento di restituire una NUOVA LISTA ORDINATA
+
+		// 1. Ordinare in base all'età (ordine crescente)
+		List<User> usersSortedByAge = users.stream().sorted(Comparator.comparingInt(User::getAge)).toList();
+		usersSortedByAge.forEach(System.out::println);
+
+		// 2. Ordinare in base all'età (ordine decrescente)
+		List<User> usersSortedByAgeDesc = users.stream().sorted(Comparator.comparingInt(User::getAge).reversed()).toList();
+		//List<User> usersSortedByAgeDesc = users.stream().sorted(Comparator.reverseOrder()).toList();
+		usersSortedByAgeDesc.forEach(System.out::println);
+
+		// 3. Ordinare in base al nome (ordine crescente)
+		List<User> usersSortedByName = users.stream().sorted(Comparator.comparing(User::getName)).toList();
+		usersSortedByName.forEach(System.out::println);
+
+		// 4. Ordinare in base al nome (ordine decrescente)
+		List<User> usersSortedByNameDesc = users.stream().sorted(Comparator.comparing(User::getName, Comparator.reverseOrder())).toList();
+		usersSortedByNameDesc.forEach(System.out::println);
 
 	}
 }
