@@ -82,5 +82,32 @@ public class Application {
 		List<User> usersSortedByNameDesc = users.stream().sorted(Comparator.comparing(User::getName, Comparator.reverseOrder())).toList();
 		usersSortedByNameDesc.forEach(System.out::println);
 
+		System.out.println("----------------------------------- LIMIT --------------------------------------------");
+		// 5. Ordinare in base al nome (ordine decrescente) e voglio solo 3 risultati
+		List<User> usersSortedByNameDescLimited = users.stream().sorted(Comparator.comparing(User::getName, Comparator.reverseOrder())).skip(10).limit(3).toList();
+		// Attenzione a dove inseriamo skip e limit, se li mettiamo prima del sorting stiamo prendendo magari solo 3 elementi dalla lista che poi verranno sortati
+		// Viceversa se faccio prima il sort e poi skip e limit, otterrò un ordine "globale" e poi quindi prenderò 3 elementi dalla lista
+		usersSortedByNameDescLimited.forEach(System.out::println);
+
+		// Collections.shuffle(usersSortedByNameDescLimited); Se voglio mescolare l'ordine degli elementi
+
+		// ********************************************************* MAP TO ********************************************************
+		System.out.println("********************************************************* MAP TO ********************************************************");
+
+		// 1. Calcolo della somma totale delle età (con map e reduce)
+		int totalAges = users.stream().map(User::getAge).reduce(0, (partialSum, currentElem) -> partialSum + currentElem);
+		System.out.println("Totale 1: " + totalAges);
+
+		// 2. Calcolo della somma totale delle età (con mapTo)
+		int totalAges2 = users.stream().mapToInt(User::getAge).sum();
+		System.out.println("Totale 2: " + totalAges2);
+
+		// 3. Calcolo della media delle età (con mapTo)
+		double average2 = users.stream().mapToInt(User::getAge).average().getAsDouble();
+		System.out.println("Media: " + average2);
+
+		// 4. Restituisce l'età massima
+		int etàMassima = users.stream().mapToInt(User::getAge).max().getAsInt();
+		System.out.println("Età massima " + etàMassima);
 	}
 }
